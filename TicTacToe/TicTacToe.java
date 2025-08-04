@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 public class TicTacToe {
@@ -21,16 +20,29 @@ public class TicTacToe {
             }
         }
 
+        Scanner scanner = new Scanner(System.in);
+
         // Start the game loop
         while (true) {
             // Print the grid
             printGrid();
 
-            // Prompt the current player to make a move
-            System.out.println("Player " + currentPlayer + ", enter your move (row, col): ");
-            Scanner scanner = new Scanner(System.in);
-            int row = scanner.nextInt();
-            int col = scanner.nextInt();
+            int row, col;
+
+            // Prompt and validate move
+            while (true) {
+                System.out.println("Player " + currentPlayer + ", enter your move (row, col): ");
+                row = scanner.nextInt();
+                col = scanner.nextInt();
+
+                if (row < 0 || row > 2 || col < 0 || col > 2) {
+                    System.out.println("Invalid position! Row and column must be between 0 and 2.");
+                } else if (grid[row][col] != ' ') {
+                    System.out.println("Cell already taken! Try a different move.");
+                } else {
+                    break; // Valid move
+                }
+            }
 
             // Update the grid with the player's move
             grid[row][col] = currentPlayer;
@@ -54,6 +66,8 @@ public class TicTacToe {
             // Switch to the other player
             currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
         }
+
+        scanner.close();
     }
 
     // Print the grid to the console
@@ -94,12 +108,7 @@ public class TicTacToe {
         }
 
         // Check for diagonal wins
-        if (isDiag1Win() || isDiag2Win()) {
-            return true;
-        }
-
-        // If none of the above checks passed, there is no winner
-        return false;
+        return isDiag1Win() || isDiag2Win();
     }
 
     // Check if the given row has a winning combination
@@ -133,4 +142,5 @@ public class TicTacToe {
         }
         return true;
     }
+
 }
